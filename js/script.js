@@ -55,6 +55,10 @@ var citation 	= 	document.getElementsByClassName("citation")[0];
 
 var year 		= 	document.getElementsByClassName("year")[0];
 
+var quote_box	=	document.getElementById("quote-box");
+
+console.log(quote_box)
+
 /**
  * Get a random number from min number include to max number include
  * @param  {int} Min min number
@@ -94,9 +98,14 @@ function printQuote () {
 
 	citation.innerHTML 	= random_quote.citation;
 
-	source.innerHTML 	= random_quote.source;
-
 	year.innerHTML 		= random_quote.year;
+
+	source.innerHTML	= random_quote.source;
+	/**
+	 * Because innerHTML destroy all childNodes I use appendChild to reappend the childs elements to himself
+	 * ps: It's a little bit tricky I know :)
+	 */
+	source.appendChild(citation).appendChild(year);
 
 }
 
