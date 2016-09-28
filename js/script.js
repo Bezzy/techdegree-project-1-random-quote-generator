@@ -6,26 +6,34 @@ var quotes = [
 		{
 			"string": "How many cares one loses when one decides not to be something but to be someone.",
 			"source": "Gabrielle",
-			"citation": "Coco Chanel",
-			"year": ""
+			"citation": "Coco Chanel"
 		},
 		{
 			"string": "Be who you are and say what you feel, because those who mind don’t matter and those who matter don’t mind.",
 			"source": "Raplh Waldo Emerson",
-			"citation": "Imitation is sucide",
-			"year": ""
+			"citation": "Imitation is sucide"
 		},
 		{
 			"string": "Do what you feel in your heart to be right, for you’ll be criticized anyway.",
 			"source": "Eleanor Roosevelt",
-			"citation": "",
-			"year": ""
+			"category": "Life"
 		},
 		{
 			"string": "Imagination is more important than knowledge. For knowledge is limited, whereas imagination embraces the entire world, stimulating progress, giving birth to evolution.",
 			"source": "Albert Einstein",
 			"citation": "Cosmic Religion and Other Opinions and Aphorisms",
-			"year": "1931"
+			"year": "1931",
+			"category": "Creativity"
+		},
+		{
+			"string": "Mistakes are always forgivable, if one has the courage to admit them.",
+			"source": "Bruce Lee",
+			"category": "Courage"
+		},
+		{
+			"string": "Do not take life too seriously. You will never get out of it alive.",
+			"source": "Elbert Hubbard",
+			"category": "Alife"
 		}
 ];
 
@@ -43,21 +51,7 @@ var min_number_quote = 0;
 
 var random_quote;
 
-/**
- * Store the first element with the class 'foo'
- * @type {object literal}
- */
-var quote 		= 	document.getElementsByClassName("quote")[0];
-
-var source 		= 	document.getElementsByClassName("source")[0];
-
-var citation 	= 	document.getElementsByClassName("citation")[0];
-
-var year 		= 	document.getElementsByClassName("year")[0];
-
-var quote_box	=	document.getElementById("quote-box");
-
-console.log(quote_box)
+var quote_string;
 
 /**
  * Get a random number from min number include to max number include
@@ -94,20 +88,62 @@ function printQuote () {
 
 	getRandomQuote(quotes);
 
-	quote.innerHTML 	= random_quote.string;
-
-	citation.innerHTML 	= random_quote.citation;
-
-	year.innerHTML 		= random_quote.year;
-
-	source.innerHTML	= random_quote.source;
 	/**
-	 * Because innerHTML destroy all childNodes I use appendChild to reappend the childs elements to himself
-	 * ps: It's a little bit tricky I know :)
+	 * Constructs the quote and the source element
 	 */
-	source.appendChild(citation).appendChild(year);
 
+	quote_string = '<p class="quote">';
+	
+	quote_string += random_quote.string;
+	
+	quote_string += '</p>';
+	
+	quote_string += '<p class="source">';
+
+	quote_string += random_quote.source;
+
+	/**
+	 * If the property exist constructs the element
+	 */
+
+	if (typeof random_quote.citation != "undefined") {
+
+		quote_string += '<span class="citation">';
+
+		quote_string += random_quote.citation;
+
+		quote_string += '</span>';
+
+	}
+
+	if (typeof random_quote.year != "undefined") {
+
+		quote_string += '<span class="year">';
+
+		quote_string += random_quote.year;
+
+		quote_string += '</span>';
+
+	}
+
+	if (typeof random_quote.category != "undefined") {
+
+		quote_string += '<span class="category">';
+
+		quote_string += random_quote.category;
+
+		quote_string += '</span>';
+
+		console.log(random_quote.category)
+
+	}
+
+	quote_string += '</p>';
+
+	document.getElementById("quote-box").innerHTML = quote_string;
 }
+
+printQuote();
 
 
 // event listener to respond to "Show another quote" button clicks
