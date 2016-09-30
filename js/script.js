@@ -1,5 +1,5 @@
 /**
- * Store all quotes objects
+ * Stores all quotes objects
  * @type {Array}
  */
 var quotes = [
@@ -19,11 +19,11 @@ var quotes = [
 			"category": "Life"
 		},
 		{
-			"string": "Imagination is more important than knowledge. For knowledge is limited, whereas imagination embraces the entire world, stimulating progress, giving birth to evolution.",
+			"string": "The difference between stupidity and genius is that genius has its limits.",
 			"source": "Albert Einstein",
-			"citation": "Cosmic Religion and Other Opinions and Aphorisms",
-			"year": "1931",
-			"category": "Creativity"
+			"citation": "The New York Times",
+			"year": "1921",
+			"category": "Intelligence"
 		},
 		{
 			"string": "Mistakes are always forgivable, if one has the courage to admit them.",
@@ -38,27 +38,48 @@ var quotes = [
 ];
 
 /**
- * store the number of quotes object into the array. Start counting from 0
+ * stores the number of quotes object into the array. Start counting from 0
  * @type {int}
  */
-var quotes_length = quotes.length - 1;
+var quotes_length = quotes.length;
 
 /**
- * Store the minimun index number from an array
+ * Stores the minimun index number from an array
  * @type {int}
  */
 var min_number_quote = 0;
 
+/**
+ * Stores the random quote
+ */
 var random_quote;
 
+/**
+ * Stores a mirror of the random quote
+ */
+var quote_mirror;
+
+/**
+ * Stores a random number
+ */
+var random_number;
+
+/**
+ * Stores the quotes displayed once
+ * @type {Array}
+ */
+var quotes_mirror = [];
+
 var quote_string;
+
+var timeout;
 
 /**
  * Get a random number from min number include to max number include
  * @param  {int} Min min number
  * @param  {int} Max max number
  * @return {int} Return a random
- * more details to https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Math/random
+ * more details at https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Math/random
  */
 function getRandomNumber (min, max) {
 
@@ -71,22 +92,52 @@ function getRandomNumber (min, max) {
 } 
 
 /**
- * Pick a random quote
- * @param  {array} quotes Containing all quotes
- * @return {object literal} Return a quote with all properties
+ * Pick a random quote and display only once until that all quotes are displayed 
+ * @param  {array} remaining_quotes takes a quotes array
+ * @return {object literal} and return an object literal with all quotes properties
  */
-function getRandomQuote (quotes) {
+function getRandomQuote (remaining_quotes) {
+	/**
+	 * If the arrays quotes are not empties, stores the citation and kick out him
+	 **/
+	if (remaining_quotes.length !== 0) {
+		
+		random_number = getRandomNumber(min_number_quote, remaining_quotes.length -1);
+		
+		random_quote = remaining_quotes[random_number];
+		
+		quote_mirror = remaining_quotes.splice(random_number, 1);
+		
+		quotes_mirror.push(quote_mirror[0]);
+		
+		return random_quote;
+	}
+	else {
 
-	random_quote = quotes[getRandomNumber(min_number_quote, quotes_length)];
-	
-	return random_quote;
+		quotes = quotes_mirror;
+    	
+    	quotes_mirror = [];
+    	
+    	random_number = getRandomNumber(min_number_quote, quotes.length -1);
+    	
+    	random_quote = quotes[random_number];
+    	
+    	return random_quote;
+	}
+}
 
+/**
+ * Changes the body background randomly
+ */
+function changeBackground(){
+
+	document.body.style.backgroundColor = "rgb(" + getRandomNumber(0, 255) + "," + getRandomNumber(0, 255) +", " + getRandomNumber(0, 255)  + ")";
 
 }
 
 function printQuote () {
 
-	getRandomQuote(quotes);
+	getRandomQuote(quotes, quotes_mirror, quotes_length);
 
 	/**
 	 * Constructs the quote and the source element
@@ -133,18 +184,28 @@ function printQuote () {
 		quote_string += random_quote.category;
 
 		quote_string += '</span>';
-
-		console.log(random_quote.category)
-
 	}
 
 	quote_string += '</p>';
 
+	changeBackground();
 	document.getElementById("quote-box").innerHTML = quote_string;
+
 }
 
+/**
+ * Set the document once before to ckick on the button
+ */
 printQuote();
 
+/**
+ * call function every 10 sec 
+ */
+timeout = window.setInterval(function() {
+
+	printQuote();
+
+}, 10000);
 
 // event listener to respond to "Show another quote" button clicks
 // when user clicks anywhere on the button, the "printQuote" function is called
